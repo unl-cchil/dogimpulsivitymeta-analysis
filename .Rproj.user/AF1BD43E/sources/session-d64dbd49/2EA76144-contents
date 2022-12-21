@@ -1,0 +1,75 @@
+library(readr)
+library(stringr)
+
+# Copy files from project directory
+file.copy("~/active_sync/projects/dog_impulsivity_meta-analysis/data/barela_etal_2023_data1.xlsx", "barela_etal_2023_data1.xlsx", overwrite = TRUE)
+file.copy("~/active_sync/projects/dog_impulsivity_meta-analysis/data/barela_etal_2023_data2.csv", "barela_etal_2023_data2.csv", overwrite = TRUE)
+file.copy("~/active_sync/projects/dog_impulsivity_meta-analysis/R/barela_etal_2023_rcode.R", "R/barela_etal_2023_rcode.R", overwrite = TRUE)
+file.copy("~/active_sync/projects/dog_impulsivity_meta-analysis/docs/barela_etal_2023.Rmd", "docs/barela_etal_2023.Rmd", overwrite = TRUE)
+file.copy("~/active_sync/projects/dog_impulsivity_meta-analysis/docs/barela_etal_2023_SM.Rmd", "docs/barela_etal_2023_SM.Rmd", overwrite = TRUE)
+# file.copy("~/active_sync/projects/dog_impulsivity_meta-analysis/figures/food_apparatus.png", "figures/food_apparatus.png", overwrite = TRUE)
+# file.copy("~/active_sync/projects/dog_impulsivity_meta-analysis/figures/social_apparatus.png", "figures/social_apparatus.png", overwrite = TRUE)
+# file.copy("~/active_sync/projects/dog_impulsivity_meta-analysis/figures/barela_etal_2023.mp4", "barela_etal_2023.mp4", overwrite = TRUE)
+file.copy("~/active_sync/projects/dog_impulsivity_meta-analysis/docs/barela_etal_2023.bib", "barela_etal_2023.bib", overwrite = TRUE)
+file.copy("~/active_sync/projects/dog_impulsivity_meta-analysis/docs/r-references.bib", "r-references.bib", overwrite = TRUE)
+# file.copy("~/active_sync/projects/dog_impulsivity_meta-analysis/docs/prsb.csl", "barela_etal_2023.csl", overwrite = TRUE)
+file.copy("~/active_sync/projects/dog_impulsivity_meta-analysis/docs/apa7_chron.csl", "barela_etal_2023b.csl", overwrite = TRUE)
+file.copy("~/active_sync/projects/dog_impulsivity_meta-analysis/README.md", "README.md", overwrite = TRUE)
+
+# Edit R script
+r_code <- read_file("R/barela_etal_2023_rcode.R") |>
+  # str_replace("stevens_etal_", "stevens_etal_2021_") |>
+  str_replace("library\\(here\\)", "") |>
+  str_replace('data/barela_etal_2023_data1.xlsx', 'barela_etal_2023_data1.xlsx') |>
+  str_replace('read_csv\\(here\\("data/barela_etal_2023_data2.csv"\\), show_col_types = FALSE\\)', 'read_csv\\("barela_etal_2023_data2.csv", show_col_types = FALSE\\)') |>
+  str_replace_all("\\(here\\(", "\\(") |>
+  str_replace_all("here\\(", "") |>
+  str_replace_all("search_file\\)", "search_file") |>
+  str_replace_all('.png"\\),', '.png",') |>
+  str_replace_all('.RData"\\)', '.RData"') |>
+  str_replace_all('save.image', '# save.image') |>
+  write_file("barela_etal_2023_rcode.R")
+source("barela_etal_2023_rcode.R")
+
+# Edit manuscript
+manuscript <- read_file("docs/barela_etal_2023.Rmd") |>
+  str_replace_all("merp_references.bib", "barela_etal_2023.bib") |>
+  str_replace_all("biology-letters.csl", "barela_etal_2023.csl") |>
+  str_replace('source\\(here\\("R/barela_etal_2023_rcode.R"\\)\\)', 'source\\("barela_etal_2023_rcode.R"\\)') |>
+  str_replace_all(" Figure used with permission under a CC-BY4.0 license: Wolff et al. \\(2022\\); available at https://doi.org/10.31234/osf.io/kxgwt.", "") |>
+  # str_replace_all("Table used with permission under a CC-BY4.0 license: Wolff, Carey, & Stevens (2022); available at https://doi.org/10.31234/osf.io/????.", "") |>
+  str_replace_all("lineno            : yes", "lineno            : no") |>
+  str_replace("authornote: \\|", paste("authornote: \\|\n\  PsyArXiv: https://doi.org/10.31234/osf.io/kxgwt\n\n\  Version:", Sys.Date(), "\n")) |>
+  str_replace_all(": \"doc\"", ": \"pub\"") |>
+  str_replace_all(": \"man\"", ": \"pub\"") |>
+  str_replace_all('out.width="100%"', 'out.width="90%"') |>
+  str_replace_all('fig.align="center"', 'fig.align = "center", fig.env = \"figure*\"') |>
+  # str_replace_all('out.width = "33\\%"', 'out.width = "30\\%"') |>
+  str_replace_all("\\\\newpage", "") |>
+  # str_replace_all("\\\\clearpage", "") |>
+  str_replace("# References", "# References\n\\\\scriptsize") |>
+  write_file("barela_etal_2023_preprint.Rmd")
+# rmdfile <- read_lines("barela_etal_2023.Rmd")
+# sm_line <- which(rmdfile == "# Supplementary Materials") - 1
+# max_line <- length(rmdfile)
+# rmd_file <- rmdfile[-(sm_line:max_line)]
+# write_lines(rmd_file, "barela_etal_2023.Rmd")
+rmarkdown::render("barela_etal_2023_preprint.Rmd")
+# file.copy("barela_etal_2023.pdf", "barela_etal_2023_all.pdf", overwrite = TRUE)
+# pdf_subset("barela_etal_2023_all.pdf", pages = 1:15, output = "barela_etal_2023.pdf")
+
+# Edit supplementary materials
+qmdfile <- read_lines("docs/barela_etal_2023_SM.qmd") |>
+  str_replace("library\\(here\\)", "") |>
+  str_replace('here\\("R/barela_etal_2023_rcode.R"\\)', '"barela_etal_2023_rcode.R"') |>
+  str_replace('apa7_chron.csl', 'barela_etal_2023b.csl') |>
+  str_replace("here\\(", "") |>
+  str_replace('.png"\\)\\)', '.png"\\)') |>
+  str_replace("merp_references.bib", "barela_etal_2023.bib") |>
+str_replace_all(" Figure used with permission under a CC-BY4.0 license: Wolff et al. \\(2022\\); available at \\[https://doi.org/10.31234/osf.io/kxgwt\\]\\(https://doi.org/10.31234/osf.io/kxgwt\\).", "") |>
+write_lines("barela_etal_2023_SM.qmd")
+# rmarkdown::render("barela_etal_2023_SM.Rmd")
+quarto::quarto_render("barela_etal_2023_SM.qmd")
+
+# Create zip file
+zip(zipfile = "barela_etal_2023_rr", files = c("r-references.bib", "README.md", "barela_etal_2023_data.csv", "barela_etal_2023_rcode.R", "barela_etal_2023_SM.pdf", "barela_etal_2023.bib", "barela_etal_2023.csl", "barela_etal_2023b.csl", "barela_etal_2023_preprint.pdf", "barela_etal_2023_preprint.Rmd"))
