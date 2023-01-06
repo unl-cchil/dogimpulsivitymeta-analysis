@@ -81,3 +81,57 @@ There are `psychinfo`, `scopus`, and `webofscience` sheets. Each sheet has a dif
 To reproduce these results, first clone or unzip the Git repository into a folder. Then, ensure that a subfolder named “figures” is in the folder. Next, open `barela_etal_2023_rcode.R` in [RStudio](https://rstudio.com) or another R interface and ensure that all packages mentioned at the top of the script are installed. Once all packages are installed, run the script in R using `source("barela_etal_2023_rcode.R")`.
 
 Once the script runs without errors, you can compile the R Markdown document `barela_etal_2023.Rmd.` Open this file in RStudio and ensure that you have packages [{knitr}](https://yihui.org/knitr/) and [{rmarkdown}](https://rmarkdown.rstudio.com/) installed. Once installed, use {knitr} to render the document (control-shift-K). Use the same process to render `barela_etal_2023_SM.Rmd`.
+
+# Dataset Metadata
+The following table is necessary for this dataset to be indexed by search
+engines such as <a href="https://g.co/datasetsearch">Google Dataset Search</a>.
+<div itemscope itemtype="http://schema.org/Dataset">
+<table>
+<tr>
+<th>property</th>
+<th>value</th>
+</tr>
+<tr>
+<td>name</td>
+<td><code itemprop="name">Meta-analysis of impulsivity as a trait in domestic dogs dataset</code></td>
+</tr>
+<tr>
+<td>description</td>
+<td><code itemprop="description">The dataset from the paper [Impulsivity as a trait in domestic dogs (Canis familiaris): A systematic review and meta-analysis](https://doi.org/10.31234/osf.io/ctfns). One data file contains all records from PsychINFO, Scopus, and Web of Science collected on 2022-06-18. Each sources has it's own sheet in the Excel file, and they include all of the metadata from each record. Each row represents a record. The second data file comprises the 64 reviewed studies and includes study metadata as well as effect size information for analyzed studies. Each row represents a study (reports could have more than one study).</code></td>
+</tr>
+</tr>
+<tr>
+<td>url</td>
+<td><code itemprop="url">https://github.com/unl-cchil/dogimpulsivitymeta-analysis</code></td>
+</tr>
+<tr>
+<td>sameAs</td>
+<td><code itemprop="sameAs">https://github.com/unl-cchil/dogimpulsivitymeta-analysis</code></td>
+</tr>
+<tr>
+<td>citation</td>
+<td><code itemprop="citation">https://doi.org/10.31234/osf.io/ctfns</code></td>
+</tr>
+<tr>
+<td>license</td>
+<td>
+<div itemscope itemtype="http://schema.org/CreativeWork" itemprop="license">
+<table>
+<tr>
+<th>property</th>
+<th>value</th>
+</tr>
+<tr>
+<td>name</td>
+<td><code itemprop="name">CC BY-SA 4.0</code></td>
+</tr>
+<tr>
+<td>url</td>
+<td><code itemprop="url">https://creativecommons.org/licenses/by-sa/4.0/</code></td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+</div>
