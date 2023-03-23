@@ -82,6 +82,7 @@ reviewed_studies <- read_csv("barela_etal_2023_data2.csv", show_col_types = FALS
          entry = paste0(entry, " et al."),
          entry = sub("Olsen et al.", "Olsen", entry),
          entry = paste0(entry, " (", year, ")"),
+         entry = ifelse(entry == "Brady et al. (2018)" & is.na(sample_size), "Brady et al. (2018b)", entry),
          entry = ifelse(entry == "Fagnani et al. (2016)" & sample_size == 14, "Fagnani et al. (2016a)", entry),
          entry = ifelse(entry == "Fagnani et al. (2016)" & sample_size == 13, "Fagnani et al. (2016a)", entry),
          entry = ifelse(entry == "Fagnani et al. (2016)" & sample_size == 22, "Fagnani et al. (2016b)", entry),
@@ -92,6 +93,7 @@ reviewed_studies <- read_csv("barela_etal_2023_data2.csv", show_col_types = FALS
          neutered_status = na_if(neutered_status, "N/A"),
          tasks = sub("bucket", "cup", tasks),
          tasks = sub("delayed discounting", "delay discounting", tasks),
+         tasks = sub("delay of gratification", "delay discounting", tasks),
          tasks = sub("detour-fence", "detour fence", tasks),
          dias = case_when(
            if_any(contains("correlate_"), ~ str_detect(.x, "DIAS")) ~ 1,
@@ -100,7 +102,8 @@ reviewed_studies <- read_csv("barela_etal_2023_data2.csv", show_col_types = FALS
   ) |>
   mutate(across(contains("correlate_"), ~ sub("bucket", "cup", .x))) |>
   mutate(across(contains("correlate_"), ~ sub("detour-fence", "detour fence", .x))) |>
-  mutate(across(contains("correlate_"), ~ sub("delayed discounting", "delay discounting", .x)))
+  mutate(across(contains("correlate_"), ~ sub("delayed discounting", "delay discounting", .x))) |>
+mutate(across(contains("correlate_"), ~ sub("delay of gratification", "delay discounting", .x)))
 
 # Add study numbers to multi-study reports
 reviewed_studies$study[which(reviewed_studies$study == "Olsen (2019)" & reviewed_studies$sample_size == 15)] <- "Olsen (2019) Study 1"
@@ -170,7 +173,7 @@ measure_pairs_orig <- reviewed_studies |>
 reverse_measures <- c("social inhibition (Difference in choices between control/experimental)",
                       "a-not-b cup (First location searched)",
                       "sit-stay (Interval between breaks)",
-                      "delay of gratification (Maximum delay tolerated)",
+                      # "delay of gratification (Maximum delay tolerated)",
                       "delay discounting (Maximum delay tolerated)",
                       "spatial impulsivity (Maximum distance travelled)",
                       "spatial impulsivity (Percent choosing larger)",
@@ -272,7 +275,7 @@ prisma_df$n[which(prisma_df$data == "records_screened")] <- n_unique_records
 prisma_df$n[which(prisma_df$data == "records_excluded")] <- n_unique_records - nrow(reviewed_records)
 prisma_df$n[which(prisma_df$data == "dbr_sought_reports")] <- nrow(reviewed_records)
 prisma_df$n[which(prisma_df$data == "dbr_assessed")] <- nrow(reviewed_records)
-prisma_df$n[which(prisma_df$data == "dbr_excluded")] <- paste0("Not original research paper in English,", nrow(filter(reviewed_records, exclusion == 1)), "; Did not include two impulsivity tasks,", nrow(filter(reviewed_records, exclusion == 2)), "; Did not report necessary statistics,", nrow(filter(reviewed_records, exclusion == 3)), "; Duplicate record,1")
+prisma_df$n[which(prisma_df$data == "dbr_excluded")] <- paste0("Not original research paper in English,", nrow(filter(reviewed_records, exclusion == 1)), "; Did not include two impulsivity tasks,", nrow(filter(reviewed_records, exclusion == 2)), "; Did not report necessary \nstatistics,", nrow(filter(reviewed_records, exclusion == 3)))
 prisma_df$n[which(prisma_df$data == "new_studies")] <- nrow(analyzed_records)
 prisma_df$boxtext[which(prisma_df$data == "dbr_sought_reports")] <- "Articles sought for retrieval"
 prisma_df$boxtext[which(prisma_df$data == "dbr_notretrieved_reports")] <- "Articles not retrieved"
@@ -298,7 +301,7 @@ studies_table <- analyzed_studies |>
   ungroup() |>
   mutate(tasks = str_to_title(tasks),
          tasks = gsub("Dias", "DIAS", tasks),
-         tasks = gsub("Of", "of", tasks),
+         # tasks = gsub("Of", "of", tasks),
          tasks = gsub("-Not-", "-not-", tasks),
          tasks = gsub("-For-", "-for-", tasks),
          study = sub("Mueller", 'M\\\\"{u}ller', study)) |>
@@ -306,6 +309,7 @@ studies_table <- analyzed_studies |>
   arrange(study_num)
 
 # Generate table of tasks, associated measures, and studies
+task_descriptions <- data.frame(task = tasks[-which(tasks == "DIAS")], desc = c("Dog is trained to travel around one side of barrier for reward and then must switch to the other side", "Dog is trained to select one cup with reward under it and then must switch to selecting another cup", "Dog has to find open side of transparent box to acquire reward", "Dogs must turn away from visible but inaccessible reward to press buzzer and acquire reward", "Dog is trained to obtain reward by entering either end of opaque cylinder and then must do the same with a transparent cylinder", "Dogs must choose between an immediate, smaller or lower quality reward vs. a delayed, larger or higher quality reward", "Dog could see reward behind transparent wall but must travel around wall to acquire reward", "Dog's leash was caught on obstacle, so they had to move away from owner to get to owner and reward", "Dog can knock over two of three cups to get rewards, which are only available in outer two cups", "Dog is commanded to `sit' and `stay' for ten minutes", "Dogs choose between an experimenter with more rewards who does not give them and an experimenter with fewer rewards who does give them", "Dogs must choose between smaller, closer and larger, more distant rewards", "Dogs is commanded to `wait' while a treat is placed in front of them"))
 task_table <- measure_pairs |>
   pivot_longer(contains("correlate_"), names_to = "which", values_to = "task_measure") |>
   filter(task_measure != "DIAS") |>
@@ -335,7 +339,9 @@ task_table <- measure_pairs |>
   group_by(task, measure) |>
   mutate(study = paste0(study_num, collapse = ", ")) |>
   select(-study_num) |>
-  distinct()
+  distinct() |>
+  left_join(task_descriptions, by = "task") |>
+  relocate(desc, .after = task)
 task_table$study[which(task_table$measure == "Frequency of errors" & task_table$task == "A-not-B Cup")] <- paste0("\\sout{", task_table$study[which(task_table$measure == "Frequency of errors" & task_table$task == "A-not-B Cup")], "}")
 task_table$study[which(task_table$measure == "Frequency of errors" & task_table$task == "Cylinder")] <- paste0("\\sout{", task_table$study[which(task_table$measure == "Frequency of errors" & task_table$task == "Cylinder")], "}")
 task_table$study[which(task_table$measure == "Percent correct trials*")] <- paste0("4, 11, \\sout{14, 15}")
@@ -344,7 +350,15 @@ task_table$study[which(task_table$measure == "Duration of time near fence")] <- 
 task_table$study[which(task_table$measure == "Interval between breaks*")] <- paste0("\\sout{", task_table$study[which(task_table$measure == "Interval between breaks*")], "}")
 task_table$study[which(task_table$measure == "Time until first break*")] <- paste0("\\sout{", task_table$study[which(task_table$measure == "Time until first break*")], "}")
 
-task_table$task <- unfill_vec(task_table$task)
+task_table <- task_table |>
+  group_by(task, desc) |>
+  summarise(measure = paste0(measure, collapse = "\n"), study = paste0(study, collapse = "\n"))
+
+# task_table$task <- unfill_vec(task_table$task)
+# task_table$desc <- unfill_vec(task_table$desc)
+# task_table2 <- task_table |>
+#   group_by(task, desc) |>
+#   summarise(measure = paste0(measure, collapse = ", "))
 
 task_dias_pairs_table <- task_dias_pairs |>
   group_by(task_a, task_b) %>%
@@ -355,7 +369,7 @@ task_dias_pairs_table <- task_dias_pairs |>
   complete(task_a, task_b) |>
   pivot_wider(id_cols = task_a, names_from = task_b, values_from = cell) |>
   mutate(across(-task_a, ~ gsub("-", "$-$", .x))) |>
-  relocate(DIAS, .after = 16) |>
+  relocate(DIAS, .after = 15) |>
   filter(task_a != "DIAS")
 
 
