@@ -22,11 +22,11 @@ affiliation:
 
 
 authornote: |
-  \textbf{This preprint has been accepted for publication at the \textit{Journal of Comparative Psychology}.} 
+  \textbf{This preprint has been accepted for publication at the \textit{Journal of Comparative Psychology}. This paper is not the copy of record and may not exactly replicate the authoritative document published in the APA journal. The final article is available, upon publication, at: \href{https://doi.org/10.1037/com0000352}{https://doi.org/10.1037/com0000352}.} 
 
-  PsyArXiv: https://doi.org/10.31234/osf.io/ctfns
+  PsyArXiv preprint: https://doi.org/10.31234/osf.io/ctfns
 
-  Version: 2023-03-23 
+  Version: 2023-08-23 
 
   Jeffrey R. Stevens, \orcidlink{0000-0003-2375-1360} [https://orcid.org/0000-0003-2375-1360](https://orcid.org/0000-0003-2375-1360). 
   
@@ -199,6 +199,10 @@ Our first analysis generated a matrix of the effect sizes for all impulsivity ta
 
 For any cell in the table that had three or more studies in it, we conducted a robust Bayesian, model-averaged meta-analysis. We input the correlation coefficients and sample sizes into the `RoBMA()` function in the _RoBMA_ package [@R-RoBMA], using default priors (standard normal distribution on effect sizes, inverse gamma distribution with $\alpha$ = 1 and $\beta$ = 0.15 on heterogeneity, two two-sided weight functions with cut-points at (0.05) and (0.05, 0.10) and parameters $\alpha$  = (1, 1) and (1, 1, 1), and the default point priors on the null hypotheses) [@Bartos.etal.2022]. This function allowed us to test not only if there is evidence of an effect but also evidence for between-study heterogeneity (whether there is variation in true effect sizes across studies) and publication bias [@Maier.etal.2022]. This analysis used model averaging to calculate (1) a Bayesian estimate of the effect size across all studies, (2) a Bayes factor for evidence supporting the hypothesis of an effect, (3) a Bayes factor for evidence supporting the presence of between-study heterogeneity, and (4) a Bayes factor for evidence supporting the presence of publication bias [@Maier.etal.2022]. We set the prior hypothesis probability to 0.50 for the effect size, heterogeneity, and publication bias. 
 
+# Results
+
+Our first analysis aggregated all of the correlation coefficients for each pair of tasks or task/DIAS pair for each study (Table \ref{tab:taskpairs}). Across `r nrow(measure_pairs_trimmed)` task/task or task/DIAS pairs, study authors reported `r task_dias_pairs_count$n[task_dias_pairs_count$reported_significant == "No"]` pairs as not demonstrating a statistically significant correlation and `r task_dias_pairs_count$n[task_dias_pairs_count$reported_significant == "Yes"]` pairs as demonstrating a correlation. For only the `r nrow(task_pairs)` task/task pairs, `r task_pairs_count$n[task_pairs_count$reported_significant == "No"]` were not correlated, while `r task_pairs_count$n[task_pairs_count$reported_significant == "Yes"]` were correlated. For only the `r nrow(dias_pairs)` task/DIAS pairs, `r dias_pairs_count$n[dias_pairs_count$reported_significant == "No"]` were not correlated, while `r dias_pairs_count$n[dias_pairs_count$reported_significant == "Yes"]` were correlated. Thus, the vast majority of task/task pairs show no correlations. Notably, one of the three task/task correlations was between two versions of the same task: A-not-B Barrier and A-not-B Cup. Also, the other two task correlations included the Wait-for-Treat task. The task/DIAS correlation fared better with DIAS overall scores correlating with A-not-B Cup, Delay Discounting, Delay of Gratification, and Spatial Impulsivity.
+
 ```{r taskpairs, warning = FALSE}
 task_dias_pairs_table |> 
   rename("Task" = "task_a") |> 
@@ -224,10 +228,6 @@ task_dias_pairs_table |>
   footnote(c("\\\\linebreak \\\\textit{Note}. Cells include correlation coefficient type (Pearson's $r$ or Spearman's $\\\\rho$), sample size (in parenthesis), correlation coefficient value, and study number [in brackets]. Correlation coefficients reported with $p < 0.05$ are \\\\textbf{bolded with an asterisk*}. Correlation coefficients were multiplied by $-$1 to ensure all positive correlations represent higher impulsivity for both tasks. DIAS is the Dog Impulsivity Assessment Scale (Wright et al., 2011)."),
            general_title = "", threeparttable = TRUE, escape = FALSE, fixed_small_size = TRUE)
 ```
-
-# Results
-
-Our first analysis aggregated all of the correlation coefficients for each pair of tasks or task/DIAS pair for each study (Table \ref{tab:taskpairs}). Across `r nrow(measure_pairs_trimmed)` task/task or task/DIAS pairs, study authors reported `r task_dias_pairs_count$n[task_dias_pairs_count$reported_significant == "No"]` pairs as not demonstrating a statistically significant correlation and `r task_dias_pairs_count$n[task_dias_pairs_count$reported_significant == "Yes"]` pairs as demonstrating a correlation. For only the `r nrow(task_pairs)` task/task pairs, `r task_pairs_count$n[task_pairs_count$reported_significant == "No"]` were not correlated, while `r task_pairs_count$n[task_pairs_count$reported_significant == "Yes"]` were correlated. For only the `r nrow(dias_pairs)` task/DIAS pairs, `r dias_pairs_count$n[dias_pairs_count$reported_significant == "No"]` were not correlated, while `r dias_pairs_count$n[dias_pairs_count$reported_significant == "Yes"]` were correlated. Thus, the vast majority of task/task pairs show no correlations. Notably, one of the three task/task correlations was between two versions of the same task: A-not-B Barrier and A-not-B Cup. Also, the other two task correlations included the Wait-for-Treat task. The task/DIAS correlation fared better with DIAS overall scores correlating with A-not-B Cup, Delay Discounting, Delay of Gratification, and Spatial Impulsivity.
 
 Only two task pairs included three or more studies, thereby meeting our criterion for conducting a formal meta-analysis. Because one of those pairs (Spatial Impulsivity and DIAS) has recently had a meta-analysis conducted, with new studies published after our search deadline [@Stevens.etal.2022a], we did not conduct a meta-analysis for that pair. To summarize @Stevens.etal.2022a, two out of six studies found a correlation between Spatial Impulsivity and DIAS scores. A Bayesian, model-averaged meta-analysis found anecdotal evidence of no correlation between Spatial Impulsivity and DIAS scores, but further studies are needed to confirm this result.
 
