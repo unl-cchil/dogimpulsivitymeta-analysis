@@ -3,7 +3,7 @@
 
 -   Created on 2022-12-22 by Jeffrey R. Stevens
     (<jeffrey.r.stevens@gmail.com>)
--   Finalized on 2023-01-05
+-   Finalized on 2024-03-29
 
 This repository provides the reproducible research materials for our project that provides a systematic review of impulsivity as a trait in dogs. This includes the following:
 
@@ -16,11 +16,11 @@ This repository provides the reproducible research materials for our project tha
 
 If you use any of these materials, please cite:
 
-Barela, J., Worth, Y., & Stevens, J.R. (2023). Impulsivity as a trait in domestic dogs (Canis familiaris): A systematic review and meta-analysis https://doi.org/10.31234/osf.io/ctfns.
+Barela, J., Worth, Y., & Stevens, J.R. (2024). Impulsivity as a trait in domestic dogs (_Canis familiaris_): A systematic review and meta-analysis. _Journal of Comparative Psychology_, 138(1), 20–31. https://doi.org/10.1037/com0000352
 
 ## Summary
 
-One data file (`barela_etal_2023_data1.xlsx`) contains all records from PsychINFO, Scopus, and Web of Science collected on 2022-06-18. Each sources has it's own sheet in the Excel file, and they include all of the metadata from each record. Each row represents a record. The second data file (`barela_etal_2023_data2.csv`) comprises the 64 reviewed studies and includes study metadata as well as effect size information for analyzed studies. Each row represents a study (reports could have more than one study).
+One data file (`barela_etal_2023_data1.xlsx`) contains all records from PsychINFO, Scopus, and Web of Science collected on 2022-06-18. Each source has it's own sheet in the Excel file, and they include all of the metadata from each record. Each row represents a record. The second data file (`barela_etal_2023_data2.csv`) comprises the 64 reviewed studies and includes study metadata as well as effect size information for analyzed studies. Each row represents a study (reports could have more than one study).
 
 ## License
 
@@ -97,7 +97,7 @@ engines such as <a href="https://g.co/datasetsearch">Google Dataset Search</a>.
 </tr>
 <tr>
 <td>description</td>
-<td><code itemprop="description">The dataset from the paper [Impulsivity as a trait in domestic dogs (Canis familiaris): A systematic review and meta-analysis](https://doi.org/10.31234/osf.io/ctfns). One data file contains all records from PsychINFO, Scopus, and Web of Science collected on 2022-06-18. Each sources has it's own sheet in the Excel file, and they include all of the metadata from each record. Each row represents a record. The second data file comprises the 64 reviewed studies and includes study metadata as well as effect size information for analyzed studies. Each row represents a study (reports could have more than one study).</code></td>
+<td><code itemprop="description">The dataset from the paper <a href="https://doi.org/10.1037/com0000352">Impulsivity as a trait in domestic dogs (<i>Canis familiaris</i>): A systematic review and meta-analysis</a>. One data file contains all records from PsychINFO, Scopus, and Web of Science collected on 2022-06-18. Each sources has it's own sheet in the Excel file, and they include all of the metadata from each record. Each row represents a record. The second data file comprises the 64 reviewed studies and includes study metadata as well as effect size information for analyzed studies. Each row represents a study (reports could have more than one study).</code></td>
 </tr>
 </tr>
 <tr>
@@ -110,7 +110,7 @@ engines such as <a href="https://g.co/datasetsearch">Google Dataset Search</a>.
 </tr>
 <tr>
 <td>citation</td>
-<td><code itemprop="citation">https://doi.org/10.31234/osf.io/ctfns</code></td>
+<td><code itemprop="citation">https://doi.org/10.1037/com0000352</code></td>
 </tr>
 <tr>
 <td>license</td>
